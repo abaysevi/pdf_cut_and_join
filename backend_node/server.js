@@ -1,28 +1,26 @@
-// server.js
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const { Pdf2Pic } = require('pdf2pic');
+const { fromPath } = require('pdf2pic');
 const fs = require('fs').promises;
-
-const cors = require('cors'); 
-const convertedPdfFolder = path.join(__dirname, 'converted_pdfs');
-
-// Ensure that the converted PDF folder exists
-fs.mkdir(convertedPdfFolder, { recursive: true })
-  .then(() => console.log('Converted PDF folder created'))
-  .catch((err) => console.error('Error creating converted PDF folder:', err));
-
-const pdf = require('pdf-parse');
 const { PDFDocument } = require('pdf-lib');
 
+const cors = require('cors');
 const app = express();
 const port = 3001;
+
+const pdf= require('pdf-parse');
 
 app.use(cors());
 app.use(express.json());
 
+const convertedPdfFolder = path.join(__dirname, 'converted_pdfs');
 
-// Multer configuration for file uploads
+fs.mkdir(convertedPdfFolder, { recursive: true })
+  .then(() => console.log('Converted PDF folder created'))
+  .catch((err) => console.error('Error creating converted PDF folder:', err));
+
 const storage = multer.diskStorage({
   destination: 'uploads/',
   filename: (req, file, cb) => {
@@ -32,85 +30,108 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Serve static files from the 'uploads' directory
 app.use('/uploads', express.static('uploads'));
 
-// Upload endpoint
 app.post('/upload', upload.single('pdfFile'), (req, res) => {
-  // Handle the uploaded file (e.g., save the file path or other information)
   const filePath = path.join('uploads', req.file.filename);
-
-  // Respond with the file path or any other relevant information
   res.json({ filePath });
 });
 
-// File processing endpoint
-app.post('/process', (req, res) => {
-  // Retrieve the file path from the request
-  const filePath = req.body.filePath;
+app.post('/process', async (req, res) => {
+  try {
+    const filePath = req.body.filePath;
+    const dataBuffer = await fs.readFile(filePath);
+    const data = await pdf(dataBuffer);
 
-  // Implement logic to process the uploaded PDF file (e.g., using a PDF library)
+    // Process the PDF data (add your logic here)
 
-  // Respond with a success message or other relevant information
-  res.json({ message: 'File processed successfully' });
+    res.json({ message: 'File processed successfully' });
+  } catch (error) {
+    console.error('Error processing PDF:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 app.get('/get-pdf-pages', async (req, res) => {
-    console.log("here i am");
-    try {
-      const { filePath } = req.query;
-      console.log(req.query);
-      const dataBuffer = await fs.readFile(filePath);
-      const data = await pdf(dataBuffer);
-  
-      // Use getNumberOfPages to get the number of pages
-      const numPages = data.numpages;
-  
-      const pages = Array.from({ length: numPages }, (_, i) => i + 1);
-      console.log(pages);
-      res.json({ pages });
-    } catch (error) {
-      console.error('Error fetching PDF pages:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
+  try {
+    const { filePath } = req.query;
+    const dataBuffer = await fs.readFile(filePath);
+    const data = await pdf(dataBuffer);
 
+    const numPages = data.numpages;
 
-  app.post('/combine-pages', async (req, res) => {
+    const pages = Array.from({ length: numPages }, (_, i) => i + 1);
+    res.json({ pages });
+  } catch (error) {
+    console.error('Error fetching PDF pages:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/get-pdf-page', async (req, res) => {
     try {
-      const { filePath, selectedPages } = req.body;
+      const { filePath, pageNumber } = req.query;
   
-      console.log(filePath, selectedPages);
-  
-      // Read the original PDF file
-      const originalPdfBuffer = await fs.readFile(filePath);
-      const originalPdfDoc = await PDFDocument.load(originalPdfBuffer);
-  
-      // Create a new PDF document
-      const newPdfDoc = await PDFDocument.create();
-  
-      // Add selected pages from the original PDF to the new PDF
-      for (const pageNumber of selectedPages) {
-        const [copiedPage] = await newPdfDoc.copyPages(originalPdfDoc, [pageNumber - 1]);
-        newPdfDoc.addPage(copiedPage);
+      // Validate the requested page number
+      const requestedPage = parseInt(pageNumber, 10);
+      if (isNaN(requestedPage) || requestedPage < 1) {
+        return res.status(400).json({ error: 'Invalid page number' });
       }
   
-      // Save the combined PDF to the converted PDF folder
-      const combinedPdfFileName = `combined_${Date.now()}.pdf`;
-      const combinedPdfPath = path.join(convertedPdfFolder, combinedPdfFileName);
-      const combinedPdfBytes = await newPdfDoc.save();
-      await fs.writeFile(combinedPdfPath, combinedPdfBytes);
+      // Create an instance of pdf2pic
+      const options = {
+        density: 300,
+        saveFilename: `page-${requestedPage}`,
+        savePath: convertedPdfFolder, // Provide the correct folder for saving images
+        format: 'png',
+        width: 600,
+        height: 600,
+      };
+      const convert = fromPath(filePath, options);
   
-      // Send the saved combined PDF file to the frontend
-      res.sendFile(combinedPdfPath);
+      // Convert the requested page to an image
+      const { path: imagePath } = await convert(requestedPage, { responseType: 'image' });
+      console.log('Image path:', imagePath);
+      // Set appropriate headers
+      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Content-Disposition', `inline; filename=${requestedPage}.png`);
+  
+      // Send the image file
+      res.sendFile(imagePath);
     } catch (error) {
-      console.error('Error combining pages:', error);
+      console.error('Error fetching PDF page:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
 
+app.post('/combine-pages', async (req, res) => {
+  try {
+    const { filePath, selectedPages } = req.body;
+
+    console.log(filePath, selectedPages);
+
+    const originalPdfBuffer = await fs.readFile(filePath);
+    const originalPdfDoc = await PDFDocument.load(originalPdfBuffer);
+
+    const newPdfDoc = await PDFDocument.create();
+
+    for (const pageNumber of selectedPages) {
+      const [copiedPage] = await newPdfDoc.copyPages(originalPdfDoc, [pageNumber - 1]);
+      newPdfDoc.addPage(copiedPage);
+    }
+
+    const combinedPdfFileName = `combined_${Date.now()}.pdf`;
+    const combinedPdfPath = path.join(convertedPdfFolder, combinedPdfFileName);
+    const combinedPdfBytes = await newPdfDoc.save();
+    await fs.writeFile(combinedPdfPath, combinedPdfBytes);
+
+    res.sendFile(combinedPdfPath);
+  } catch (error) {
+    console.error('Error combining pages:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-

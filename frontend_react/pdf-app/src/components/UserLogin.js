@@ -1,6 +1,7 @@
 // src/components/UserLogin.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './UserLogin.module.css';
 
 const UserLogin = ({setAuthenticated}) => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const UserLogin = ({setAuthenticated}) => {
   };
 
   return (
-    <div>
+    <div className={styles['user-login-container']}>
       <h2>User Login</h2>
       <form onSubmit={handleSubmit}>
         <label>Email:</label>

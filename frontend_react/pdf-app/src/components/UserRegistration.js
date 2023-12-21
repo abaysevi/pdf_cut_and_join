@@ -1,5 +1,7 @@
 // src/components/UserRegistration.js
 import React, { useState } from 'react';
+import RegistrationStyles from  './UserRegistration.module.css';
+
 
 const UserRegistration = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +24,7 @@ const UserRegistration = () => {
   };
 
   return (
-    <div>
+    <div className={RegistrationStyles['user-registration-container']}>
       <h2>User Registration</h2>
       <form onSubmit={handleSubmit}>
         <label>Email:</label>
