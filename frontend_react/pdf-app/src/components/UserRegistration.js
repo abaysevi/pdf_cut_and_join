@@ -1,9 +1,11 @@
 // src/components/UserRegistration.js
 import React, { useState } from 'react';
 import RegistrationStyles from  './UserRegistration.module.css';
+import { useNavigate} from 'react-router-dom';
 
 
 const UserRegistration = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -17,10 +19,33 @@ const UserRegistration = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   // Add logic to send registration data to the backend
+  //   console.log('Registration Data:', formData);
+  // };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic to send registration data to the backend
-    console.log('Registration Data:', formData);
+    try {
+      const response = await fetch('http://localhost:3001/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (response.ok) {
+        // Registration successful
+        console.log('Registration worked');
+        navigate('/')
+      } else {
+        // Registration failed
+        console.error('Registration failed');
+      }
+    } catch (error) {
+      console.error('Error during registration:', error.message);
+    }
   };
 
   return (

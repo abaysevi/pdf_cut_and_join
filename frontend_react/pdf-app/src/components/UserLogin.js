@@ -25,14 +25,41 @@ const UserLogin = ({setAuthenticated}) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   // Add logic to send login data to the backend
+  //   console.log('Login Data:', formData);
+  //   setAuthenticated(true);
+  //   console.log("login worked");
+  //   navigate('/upload');
+  // };
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic to send login data to the backend
-    console.log('Login Data:', formData);
-    setAuthenticated(true);
-    console.log("login worked");
-    navigate('/upload');
+    try {
+      const response = await fetch('http://localhost:3001/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (response.ok) {
+        // Login successful
+        setAuthenticated(true);
+        console.log('Login worked');
+        navigate('/upload');
+      } else {
+        // Login failed
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Error during login:', error.message);
+    }
   };
+
 
   return (
     <div className={styles['user-login-container']}>

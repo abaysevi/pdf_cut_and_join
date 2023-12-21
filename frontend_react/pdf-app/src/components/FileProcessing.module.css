@@ -1,83 +1,94 @@
-
+/* Default styles for larger screens */
 .file-processing-container {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f8f8;
-    color: #333;
-    margin: 0;
-    padding: 0;
-  }
-  
-  h2 {
-    color: #333;
-  }
-  
-  h3 {
-    color: #555;
-  }
-  
-  .page-selection {
-    max-width: 600px; /* Adjusted max-width */
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .page-box {
-    position: relative;
-    margin: 10px;
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f8f8;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  max-height: 100vh; /* Adjust the max-height to suit your design */
+}
+
+h2 {
+  color: #333;
+}
+
+h3 {
+  color: #555;
+}
+
+.page-selection {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.page-box {
+  position: relative;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #ddd;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.page-box.selected {
+  border-color: #4caf50;
+}
+
+.page-box:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.page-box img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.page-box:hover img {
+  border-color: #333;
+}
+
+.page-number {
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+  margin-top: 5px;
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #b3db00;
+}
+
+/* Styles for smaller screens */
+@media only screen and (max-width: 600px) {
+  .file-processing-container {
     padding: 10px;
-    border: 2px solid #ddd;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: box-shadow 0.3s ease-in-out;
   }
-  
-  .page-box.selected {
-    border-color: #4caf50;
+
+  .page-selection {
+    padding: 10px;
   }
-  
-  .page-box:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .page-box img {
-    display: block;
-    margin: 0 auto;
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: border-color 0.3s ease-in-out;
-  }
-  
-  .page-box:hover img {
-    border-color: #333;
-  }
-  
-  .page-number {
-    text-align: center; /* Center the page number */
-    font-size: 14px;
-    color: #777;
-    margin-top: 5px; /* Add margin to separate from the image */
-  }
-  
-  button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-  }
-  
-  button:hover {
-    background-color: #b3db00;
-  }
-  
+}
