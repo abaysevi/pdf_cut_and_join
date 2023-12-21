@@ -46,7 +46,7 @@ Before running the application, make sure to install the dependencies for both t
 Navigate to the backend project folder and run `npm install`.
 
 ```bash
-cd backend
+cd backend_node
 npm install
 ```
 
