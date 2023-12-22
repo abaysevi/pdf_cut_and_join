@@ -75,16 +75,4 @@ npm start
 
 3. Open your browser and go to `http://localhost:3000` to use the application.
 
-## Getting Started
 
-To use the application, follow these steps:
-
-1. Register or log in using the provided user module.
-2. Upload a PDF file.
-3. Select specific pages from the uploaded PDF.
-4. Combine the selected pages into a new PDF.
-5. Download the newly generated PDF.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
