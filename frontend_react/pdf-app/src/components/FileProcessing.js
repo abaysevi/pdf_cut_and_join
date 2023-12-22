@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { saveAs } from 'file-saver';
@@ -9,14 +7,20 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 import FilePro from './FileProcessing.module.css';
+
+// FileProcessing component
 const FileProcessing = () => {
+  // Extract file path from the URL query parameter
   const location = useLocation();
   const filePath = new URLSearchParams(location.search).get('filePath');
 
+  // State to store PDF pages, selected pages, and total number of pages
   const [pdfPages, setPdfPages] = useState([]);
   const [selectedPages, setSelectedPages] = useState([]);
   const [numPages, setNumPages] = useState(null);
 
+
+  // Fetch PDF pages when the component mounts or when the file path changes
   useEffect(() => {
     const fetchPdfPages = async () => {
       try {
@@ -86,6 +90,7 @@ const FileProcessing = () => {
       console.error('Error during page combination:', error);
     }
   };
+   // Render the FileProcessing component
   return (
     <div className={FilePro['file-processing-container']}>
       <h2>File Processing Page</h2>

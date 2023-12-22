@@ -1,7 +1,6 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-// const { Pdf2Pic } = require('pdf2pic');
 const { fromPath } = require('pdf2pic');
 const fs = require('fs').promises;
 const { PDFDocument } = require('pdf-lib');
@@ -17,12 +16,15 @@ const pdf = require('pdf-parse');
 app.use(cors());
 app.use(express.json());
 
+// Create a folder to store converted PDFs
 const convertedPdfFolder = path.join(__dirname, 'converted_pdfs');
 
+// Create the folder if it does not exist
 fs.mkdir(convertedPdfFolder, { recursive: true })
   .then(() => console.log('Converted PDF folder created'))
   .catch((err) => console.error('Error creating converted PDF folder:', err));
 
+// Configure multer for handling file uploads
 const storage = multer.diskStorage({
   destination: 'uploads/',
   filename: (req, file, cb) => {
@@ -30,15 +32,23 @@ const storage = multer.diskStorage({
   },
 });
 
+// Create a SQLite database for user management
 const db = new sqlite3.Database('users.db');
 
+// Initialize the 'users' table in the database if it doesn't exist
 db.serialize(() => {
   db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, email TEXT, password TEXT)');
 });
 
+// Enable CORS and JSON parsing middleware
+app.use(cors());
 app.use(bodyParser.json());
+
+// Initialize multer with the specified storage configuration
 const upload = multer({ storage: storage });
 
+
+// User registration endpoint
 app.post('/register', async (req, res) => {
   const { email, password } = req.body;
 
@@ -55,7 +65,7 @@ app.post('/register', async (req, res) => {
   });
 });
 
-
+// User login endpoint
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -80,15 +90,16 @@ app.post('/login', async (req, res) => {
   });
 });
 
-
-
+// Serve uploaded files statically
 app.use('/uploads', express.static('uploads'));
 
+// File upload endpoint
 app.post('/upload', upload.single('pdfFile'), (req, res) => {
   const filePath = path.join('uploads', req.file.filename);
   res.json({ filePath });
 });
 
+// Process uploaded PDF endpoint
 app.post('/process', async (req, res) => {
   try {
     const filePath = req.body.filePath;
@@ -104,6 +115,8 @@ app.post('/process', async (req, res) => {
   }
 });
 
+
+// Get the number of pages in a PDF endpoint
 app.get('/get-pdf-pages', async (req, res) => {
   try {
     const { filePath } = req.query;
@@ -120,6 +133,8 @@ app.get('/get-pdf-pages', async (req, res) => {
   }
 });
 
+
+// Get a specific page from a PDF as an image endpoint
 app.get('/get-pdf-page', async (req, res) => {
   try {
     const { filePath, pageNumber } = req.query;
@@ -156,27 +171,33 @@ app.get('/get-pdf-page', async (req, res) => {
   }
 });
 
+// Combine selected pages of a PDF into a new PDF endpoint
 app.post('/combine-pages', async (req, res) => {
   try {
     const { filePath, selectedPages } = req.body;
 
     console.log(filePath, selectedPages);
 
+    // Read the original PDF file
     const originalPdfBuffer = await fs.readFile(filePath);
     const originalPdfDoc = await PDFDocument.load(originalPdfBuffer);
 
+    // Create a new PDF document
     const newPdfDoc = await PDFDocument.create();
 
+    // Copy selected pages from the original PDF to the new PDF
     for (const pageNumber of selectedPages) {
       const [copiedPage] = await newPdfDoc.copyPages(originalPdfDoc, [pageNumber - 1]);
       newPdfDoc.addPage(copiedPage);
     }
 
+    // Save the combined PDF as a new file
     const combinedPdfFileName = `combined_${Date.now()}.pdf`;
     const combinedPdfPath = path.join(convertedPdfFolder, combinedPdfFileName);
     const combinedPdfBytes = await newPdfDoc.save();
     await fs.writeFile(combinedPdfPath, combinedPdfBytes);
 
+    // Send the combined PDF file
     res.sendFile(combinedPdfPath);
   } catch (error) {
     console.error('Error combining pages:', error);
@@ -184,6 +205,7 @@ app.post('/combine-pages', async (req, res) => {
   }
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

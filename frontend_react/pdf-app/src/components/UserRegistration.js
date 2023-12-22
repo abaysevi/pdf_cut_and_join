@@ -1,16 +1,18 @@
-// src/components/UserRegistration.js
+
 import React, { useState } from 'react';
 import RegistrationStyles from  './UserRegistration.module.css';
 import { useNavigate} from 'react-router-dom';
 
-
+// UserRegistration component
 const UserRegistration = () => {
+  // Hook to navigate to different pages
   const navigate = useNavigate();
+  // State to manage form data (email and password)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-
+// Handler for input changes in the form
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -19,10 +21,11 @@ const UserRegistration = () => {
     }));
   };
 
-
+// Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Send a POST request to the server for user registration
       const response = await fetch('http://localhost:3001/register', {
         method: 'POST',
         headers: {
@@ -30,7 +33,7 @@ const UserRegistration = () => {
         },
         body: JSON.stringify(formData),
       });
-  
+  // Check if the registration was successful
       if (response.ok) {
         // Registration successful
         console.log('Registration worked');
@@ -43,7 +46,7 @@ const UserRegistration = () => {
       console.error('Error during registration:', error.message);
     }
   };
-
+ // Render the user registration form
   return (
     <div className={RegistrationStyles['user-registration-container']}>
       <h2>User Registration</h2>

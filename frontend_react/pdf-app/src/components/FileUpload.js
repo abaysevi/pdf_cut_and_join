@@ -1,12 +1,14 @@
-// src/components/FileUpload.js
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FileUp from './FileUpload.module.css'; // Make sure to adjust the path accordingly
+import FileUp from './FileUpload.module.css'; 
 
+// FileUpload component
 const FileUpload = () => {
   const [file, setFile] = useState(null);
   const navigate = useNavigate();
 
+  // Handler for file input change
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
 
@@ -19,7 +21,7 @@ const FileUpload = () => {
       console.error('Please select a valid PDF file.');
     }
   };
-
+// Handler for file upload
   const handleUpload = async () => {
     try {
       if (!file) {
@@ -50,7 +52,8 @@ const FileUpload = () => {
       console.error('Error during file upload:', error);
     }
   };
-
+  
+// Render the file upload form
   return (
     <div className={FileUp['file-upload-container']}>
       <h2>File Upload</h2>

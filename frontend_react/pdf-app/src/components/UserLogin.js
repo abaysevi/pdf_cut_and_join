@@ -1,22 +1,23 @@
-// src/components/UserLogin.js
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './UserLogin.module.css';
 
-const UserLogin = ({setAuthenticated}) => {
+// UserLogin component
+const UserLogin = ({ setAuthenticated }) => {
   const navigate = useNavigate();
 
-
+  // Handler for navigation to the registration page
   const handleRegistrationClick = () => {
     // Navigate to the registration page when the button is clicked
     navigate('/registration');
   };
-
+  // State to manage form data (email and password)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-
+  // Handler for input changes in the form
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -25,10 +26,11 @@ const UserLogin = ({setAuthenticated}) => {
     }));
   };
 
-
+  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Send a POST request to the server for user login
       const response = await fetch('http://localhost:3001/login', {
         method: 'POST',
         headers: {
@@ -36,7 +38,7 @@ const UserLogin = ({setAuthenticated}) => {
         },
         body: JSON.stringify(formData),
       });
-  
+      // Check if the login was successful
       if (response.ok) {
         // Login successful
         setAuthenticated(true);
@@ -51,7 +53,7 @@ const UserLogin = ({setAuthenticated}) => {
     }
   };
 
-
+  // Render the user login form
   return (
     <div className={styles['user-login-container']}>
       <h2>User Login</h2>
