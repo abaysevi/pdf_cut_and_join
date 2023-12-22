@@ -19,11 +19,7 @@ const UserRegistration = () => {
     }));
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // Add logic to send registration data to the backend
-  //   console.log('Registration Data:', formData);
-  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

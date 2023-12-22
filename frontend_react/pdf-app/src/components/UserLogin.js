@@ -25,15 +25,6 @@ const UserLogin = ({setAuthenticated}) => {
     }));
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // Add logic to send login data to the backend
-  //   console.log('Login Data:', formData);
-  //   setAuthenticated(true);
-  //   console.log("login worked");
-  //   navigate('/upload');
-  // };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -92,3 +92,29 @@ button:hover {
     padding: 10px;
   }
 }
+
+.selected-pages {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.selected-pages h3 {
+  color: #555;
+}
+
+.selected-pages div {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Add a bit of spacing for smaller screens */
+@media only screen and (max-width: 600px) {
+  .selected-pages {
+    padding: 10px;
+  }
+}

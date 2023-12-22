@@ -1,4 +1,4 @@
-/* UserLogin.css */
+
 
 body {
   margin: 0;
@@ -10,6 +10,11 @@ body {
 }
 
 .user-login-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   font-family: 'Arial', sans-serif;
   color: #333;
   background-color: #fff;
@@ -19,29 +24,29 @@ body {
   padding: 20px;
 }
 
-h2 {
+user-login-container h2 {
   color: #333;
 }
 
-form {
+user-login-container form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-label {
+user-login-container label {
   font-size: 16px;
   margin-bottom: 5px;
 }
 
-input {
+user-login-container input {
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ddd;
   border-radius: 5px;
 }
 
-button {
+user-login-container button {
   display: inline-block;
   padding: 10px;
   font-size: 16px;
@@ -53,14 +58,17 @@ button {
   transition: background-color 0.3s ease-in-out;
 }
 
-button:hover {
+user-login-container button:hover {
   background-color: #45a049;
 }
 
-button[type="button"] {
+user-login-container button[type="button"] {
   display: inline-block;
   background-color: #ccc;
   color: #333;
   margin-top: 0;
   margin-left: 10px; /* Add a margin between the buttons */
 }
+
+
+ 

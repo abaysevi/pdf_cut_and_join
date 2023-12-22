@@ -1,51 +1,50 @@
-/* UserRegistration.css */
+
 
 .user-registration-container {
-    font-family: 'Arial', sans-serif;
-    color: #333;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    width: 400px; /* Adjust the width as needed */
-    padding: 20px;
-    margin: 0 auto;
-    margin-top: 50px; /* Adjust the top margin as needed */
-  }
-  
-  .user-registration-container h2 {
-    color: #333;
-  }
-  
-  .user-registration-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .user-registration-container label {
-    font-size: 16px;
-    margin-bottom: 5px;
-  }
-  
-  .user-registration-container input {
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  .user-registration-container button {
-    padding: 10px;
-    font-size: 16px;
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-  }
-  
-  .user-registration-container button:hover {
-    background-color: #2980b9;
-  }
-  
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 400px; /* Adjust the width as needed */
+  padding: 20px;
+  margin: 0 auto;
+  margin-top: 50px; /* Adjust the top margin as needed */
+}
+
+user-registration-container h2 {
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+user-registration-container button:hover {
+  background-color: #2980b9;
+}

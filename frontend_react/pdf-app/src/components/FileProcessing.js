@@ -89,7 +89,7 @@ const FileProcessing = () => {
   return (
     <div className={FilePro['file-processing-container']}>
       <h2>File Processing Page</h2>
-
+  
       <div className={FilePro['page-selection']}>
         <h3>Select Pages to Combine</h3>
         <div>
@@ -113,12 +113,18 @@ const FileProcessing = () => {
           ))}
         </div>
       </div>
-
+  
+      <div className={FilePro['selected-pages']}>
+        <h3>Selected Pages</h3>
+        <div>{selectedPages.map((page) => <div key={page}>Page {page}</div>)}</div>
+      </div>
+  
       <button className={FilePro['button']} onClick={handleCombineAndDownload}>
         Combine and Download Selected Pages
       </button>
     </div>
   );
+  
 };
 
 
